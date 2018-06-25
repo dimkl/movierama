@@ -1,0 +1,32 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+<head>
+{# CSS #}
+<link rel="stylesheet" href="{% static 'css/vendors/normalize.css' %}">
+<link rel="stylesheet" href="{% static 'css/vendors/bootstrap.min.css' %}">
+
+<link rel="stylesheet" href="{% static 'css/main.css' %}">
+{% block head_css %}
+{% endblock %}
+
+{# JS #}
+<script type="text/javascript" src="{% static 'js/vendors/jquery.min.js'%}"></script>
+<script type="text/javascript" src="{% static 'js/vendors/bootstrap.min.js'%}"></script>
+<script type="text/javascript" src="{% static 'js/vendors/vue.min.js'%}"></script>
+
+<script type="text/javascript" src="{% static 'js/main.js'%}"></script>
+
+{% block head_scripts %}
+{% endblock %}
+</head>
+<body>
+{% block content %}
+{% endblock %}
+
+{% block scripts %}
+{% endblock %}
+
+</body>
+</html>
