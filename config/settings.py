@@ -45,7 +45,8 @@ LOCAL_APPS = ['movies.apps.MoviesConfig']
 
 THIRD_PARTY_APPS = [
     'allauth',
-    'allauth.account'
+    'allauth.account',
+    'rest_framework',
 ]
 
 INSTALLED_APPS += THIRD_PARTY_APPS + LOCAL_APPS
@@ -146,3 +147,18 @@ AUTHENTICATION_BACKENDS = (
 )
 
 SITE_ID = 1
+
+
+# REST FRAMEWORK
+
+REST_FRAMEWORK = {
+    # Use Django's standard `django.contrib.auth` permissions,
+    # or allow read-only access for unauthenticated users.
+    'DEFAULT_PERMISSION_CLASSES': [
+        #'rest_framework.permissions.IsAuthenticated',
+        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
+    ],
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.SessionAuthentication',
+    ]
+}

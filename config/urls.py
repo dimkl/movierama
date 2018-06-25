@@ -21,4 +21,7 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^accounts/', include('allauth.urls')),
     url(r'^movies/',include('movies.urls', namespace='movies') ),
+    # api
+     url(r'^api-auth/', include('rest_framework.urls')),
+     url(r'^api/', include('config.routers')),
 ]
