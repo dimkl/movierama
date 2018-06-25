@@ -17,10 +17,16 @@ Including another URLconf
 from django.conf.urls import url, include
 from django.contrib import admin
 
+from movies.views import MoviesListView
+
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
+    # third party 
     url(r'^accounts/', include('allauth.urls')),
-    url(r'^movies/',include('movies.urls', namespace='movies') ),
+    url(r'^anymail/', include('anymail.urls')),
+    # local apps
+    url(r'^$',MoviesListView.as_view(), name='homepage' ),
+    # url(r'^movies/',include('movies.urls', namespace='movies') ),
     # api
      url(r'^api-auth/', include('rest_framework.urls')),
      url(r'^api/', include('config.routers')),

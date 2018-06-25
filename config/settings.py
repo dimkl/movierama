@@ -46,7 +46,9 @@ LOCAL_APPS = ['movies.apps.MoviesConfig']
 THIRD_PARTY_APPS = [
     'allauth',
     'allauth.account',
+    'allauth.socialaccount',
     'rest_framework',
+    'anymail',
 ]
 
 INSTALLED_APPS += THIRD_PARTY_APPS + LOCAL_APPS
@@ -136,7 +138,13 @@ STATICFILES_DIRS =[
      os.path.join(BASE_DIR, "__static"),
 ]
 
+
+# authentication
+LOGIN_REDIRECT_URL = '/'
+SITE_ID = 1
+
 # allauth Configuration
+
 AUTHENTICATION_BACKENDS = (
     # Needed to login by username in Django admin, regardless of `allauth`
     'django.contrib.auth.backends.ModelBackend',
@@ -146,7 +154,6 @@ AUTHENTICATION_BACKENDS = (
 
 )
 
-SITE_ID = 1
 
 
 # REST FRAMEWORK
@@ -161,4 +168,32 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.SessionAuthentication',
     ]
+}
+
+# EMAIL SMTP SETTINGS
+EMAIL_USE_TLS = True
+
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# EMAIL_HOST = 'smtp.sparkpostmail.com'
+# EMAIL_PORT = 587
+# EMAIL_HOST_USER = 'SMTP_Injection'
+# EMAIL_HOST_PASSWORD = 'ae8dfd4f364835cf9b7e7e699fdac5bdc74ca26c'
+
+# DEFAULT_FROM_EMAIL = 'movierama@mailinator.com'
+# EMAIL_BACKEND = "anymail.backends.sparkpost.EmailBackend"
+# ANYMAIL = {
+#     'SPARKPOST_API_KEY': 'ae8dfd4f364835cf9b7e7e699fdac5bdc74ca26c',
+#     'SEND_DEFAULTS': {
+#         'use_sandbox': True,
+#         'from_email': 'django-sparkpost@sparkpostbox.com'
+#     }
+# }
+
+SPARKPOST_API_KEY = 'ae8dfd4f364835cf9b7e7e699fdac5bdc74ca26c'
+EMAIL_BACKEND = 'sparkpost.django.email_backend.SparkPostEmailBackend'
+SPARKPOST_OPTIONS = {
+    'track_opens': False,
+    'track_clicks': False,
+    'transactional': True,
+    'use_sandbox': True
 }
