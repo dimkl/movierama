@@ -12,15 +12,18 @@ class Movie(models.Model):
     air_date =  models.DateTimeField(null=True, blank=True)
     publication_date = models.DateTimeField(auto_now_add=True)
     
+    likes_counter = models.PositiveSmallIntegerField(default=0)    
+    hates_counter = models.PositiveSmallIntegerField(default=0)
+
     updated_at = models.DateTimeField(auto_now=True)
 
     @property
     def likes(self):
-        return self.opinions.filter(opinion=OPINION_LIKE).count()
+        return self.opinions.filter(opinion=OPINION_LIKE)
     
     @property
     def hates(self):
-        return self.opinions.filter(opinion=OPINION_HATE).count()
+        return self.opinions.filter(opinion=OPINION_HATE)
 
 
 OPINION_LIKE = 'L'
