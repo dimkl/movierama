@@ -1,0 +1,38 @@
+/*
+    Navbar Section
+*/
+
+.custom-navbar h2
+{
+    display: inline-block;
+}
+
+.navbar-user-info{
+    margin-top: 30px;
+}
+
+@media (max-width: 320px)
+{    
+    .navbar-user-info {
+        margin-top: 0px;
+        text-align:left;
+        display: block;
+        float: none!important;
+    }
+}
+
+/*
+   Filter bar Section
+*/
+
+.filters-panel>.filters {
+    margin-left: 10px;
+}
+
+/*
+    Movie Item Section
+*/
+
+.movie-item.panel .title {
+    margin-top: 0px;
+}

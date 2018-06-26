@@ -1,0 +1,16 @@
+{% load i18n %}
+
+{% trans 'Posted by' as user_text %}
+{% trans 'likes' as likes_text %}
+{% trans 'hates' as hates_text %}
+
+{% verbatim %}
+<div class="movie-item panel panel-default">
+    <div class="panel-body">
+        <h3 class="title"> {{ movie.title }} </h3>
+        <div> {{ user_text }} {{ movie.user.username }} {{ movie.publication_date_since }} </div>
+        <div> {{ movie.description }} </div>
+        <div> {{ movie.likes }} {{ likes_text }} | {{ movie.hates }} {{ hates_text }}</div>
+    </div>
+</div>
+{% endverbatim %}

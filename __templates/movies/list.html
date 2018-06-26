@@ -4,5 +4,11 @@
 {% endblock %}
 
 {% block content %}
-<div> Trochtiko!! </div>
+
+<div class="row well">
+    {% include 'movies/components/filters.html' %}
+</div>
+<div class="row">
+    {% include 'movies/components/movie.html' %}
+</div>
 {% endblock %}

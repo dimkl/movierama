@@ -1,0 +1,14 @@
+{% load i18n %}
+
+<h2 > MovieRama </h2>
+<span class="navbar-user-info pull-right">
+{% if request.user.is_authenticated %}
+    {% trans 'Welcome back' %} 
+    {#<a href="#">{{ request.user.username }}</a>  | #} 
+    <a href="#">{{ request.user.first_name }} {{ request.user.last_name }}</a> | 
+    <a href="{% url 'account_logout' %}">{% trans 'Logout' %} </a>
+{% else %}
+    <a href="{% url 'account_login' %}">  {% trans 'Login' %} </a> or  
+    <a href="{% url 'account_signup' %}">  {% trans 'Signup' %} </a>
+{% endif %}
+</span>
