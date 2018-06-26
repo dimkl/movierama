@@ -41,14 +41,20 @@ INSTALLED_APPS = [
     'django.contrib.sites'
 ]
 
-LOCAL_APPS = ['movies.apps.MoviesConfig']
+LOCAL_APPS = [
+    'movies.apps.MoviesConfig', 
+    'users.apps.UsersConfig', 
+    'core.apps.CoreConfig'
+]
 
 THIRD_PARTY_APPS = [
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
     'rest_framework',
-    'anymail',
+    'rest_framework.authtoken',
+    'django_extensions',
+    # 'anymail',
 ]
 
 INSTALLED_APPS += THIRD_PARTY_APPS + LOCAL_APPS
@@ -144,17 +150,19 @@ LOGIN_REDIRECT_URL = '/'
 SITE_ID = 1
 
 # allauth Configuration
-
+# TODO: remove it when sent email is fixed with some backend 
+ACCOUNT_EMAIL_VERIFICATION='none'
+ACCOUNT_LOGOUT_ON_GET = True
 AUTHENTICATION_BACKENDS = (
     # Needed to login by username in Django admin, regardless of `allauth`
     'django.contrib.auth.backends.ModelBackend',
-
     # `allauth` specific authentication methods, such as login by e-mail
     'allauth.account.auth_backends.AuthenticationBackend',
-
 )
-
-
+ACCOUNT_FORMS = {
+    'signup' : 'users.forms.SignupForm'
+}
+# ACCOUNT_SIGNUP_FORM_CLASS = 'users.forms.SignupForm'
 
 # REST FRAMEWORK
 
@@ -163,11 +171,13 @@ REST_FRAMEWORK = {
     # or allow read-only access for unauthenticated users.
     'DEFAULT_PERMISSION_CLASSES': [
         #'rest_framework.permissions.IsAuthenticated',
-        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
+        'rest_framework.permissions.AllowAny'
     ],
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.SessionAuthentication',
-    ]
+        'rest_framework.authentication.TokenAuthentication',
+    ],
+    'EXCEPTION_HANDLER': 'core.api.custom_exception_handler'
 }
 
 # EMAIL SMTP SETTINGS
@@ -189,11 +199,11 @@ EMAIL_USE_TLS = True
 #     }
 # }
 
-SPARKPOST_API_KEY = 'ae8dfd4f364835cf9b7e7e699fdac5bdc74ca26c'
-EMAIL_BACKEND = 'sparkpost.django.email_backend.SparkPostEmailBackend'
-SPARKPOST_OPTIONS = {
-    'track_opens': False,
-    'track_clicks': False,
-    'transactional': True,
-    'use_sandbox': True
-}
+# SPARKPOST_API_KEY = 'ae8dfd4f364835cf9b7e7e699fdac5bdc74ca26c'
+# EMAIL_BACKEND = 'sparkpost.django.email_backend.SparkPostEmailBackend'
+# SPARKPOST_OPTIONS = {
+#     'track_opens': False,
+#     'track_clicks': False,
+#     'transactional': True,
+#     'use_sandbox': True
+# }

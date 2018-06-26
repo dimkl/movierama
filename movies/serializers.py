@@ -1,9 +1,11 @@
-from rest_framework.serializers import ModelSerializer, ALL_FIELDS
+from rest_framework import serializers
 
 from .models import Movie
+from users.serializers import UserSerializer
 
-
-class MovieSerializer(ModelSerializer):
+class MovieSerializer(serializers.ModelSerializer):
+    user = UserSerializer(read_only=True)
+        
     class Meta:
         model = Movie
-        fields = ALL_FIELDS
+        exclude = ('updated_at', )
