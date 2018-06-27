@@ -19,6 +19,7 @@ class MovieViewSet(mixins.ListModelMixin,
     
     filter_backends = (OrderingFilter, SearchFilter)
     ordering_fields = ('likes_counter', 'hates_counter', 'publication_date', 'air_date', )
+    ordering = ('-publication_date', )
     search_fields = ('=user__username', )
     
     def check_object_permissions(self, request, instance):

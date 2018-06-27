@@ -16,6 +16,9 @@ class Movie(models.Model):
     hates_counter = models.PositiveSmallIntegerField(default=0)
 
     updated_at = models.DateTimeField(auto_now=True)
+    
+    class Meta:
+        ordering = ('-publication_date', )
 
     @property
     def likes(self):
