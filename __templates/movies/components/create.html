@@ -1,5 +1,48 @@
-<form >
-    <input name="title" v-model="title" />
-    <input name="description" v-model="description" />
-    <input name="air_date" v-model="air_date" />
+{% load i18n %}
+
+<script type="text/html" id="movie-form-component-template">
+<form class="col-xs-12 well" ref="form" @submit.prevent="create">
+    <div class="form-group">
+        <p>{% trans 'Create new movie' %} </p>
+        
+        <input required class="form-control" name="title" placeholder="{% trans 'Title' %}" v-model="title" />
+        <input type="date" class="form-control" name="air_date" v-model="air_date" />
+        <textarea required class="form-control" name="description" v-model="description" > {% trans 'Description' %}</textarea>
+    
+        <button class="btn btn-default" type="submit"> 
+            {%trans 'Create' %} 
+        </button>
+    </div>
 </form>
+</script>
+<script type="text/javascript">
+(function(){
+    Vue.component('movie-form-component', {
+        template:'#movie-form-component-template',
+        props: {
+            'title':{
+                default:'',
+                type: String
+            },
+            'description':{
+                default:'',
+                type: String
+            },
+            'air_date':{
+                default:'',
+                type: String
+            }
+        },
+      
+        methods: {
+            create: function(){
+                this.$emit('create-movie', {
+                    title: this.title,
+                    description: this.description,
+                    air_date: this.air_date
+                });
+            },
+        }
+    })
+})()
+</script>

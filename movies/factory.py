@@ -48,7 +48,7 @@ def get_sample_movies(users, number=4):
         list<movies.models.Movie>: list of movies
     """
     owner = users[0]
-    return [Movie.objects.create(title=str(m), description=str(m), user=owner, air_date=now()) for m in range(0, number)]
+    return [Movie.objects.create(title=str(m), description=str(m), user=owner, air_date=now().date()) for m in range(0, number)]
 
 
 def set_sample_opinions(users, movies, opinion):

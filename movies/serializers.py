@@ -18,7 +18,10 @@ class MovieSerializer(serializers.ModelSerializer):
     
     is_liked = serializers.SerializerMethodField()
     is_hated = serializers.SerializerMethodField()
+    is_opinion_disabled = serializers.SerializerMethodField()
     
+    publication_date_since = serializers.SerializerMethodField()
+
     class Meta:
         model = Movie
         exclude = ('updated_at', )
@@ -30,6 +33,14 @@ class MovieSerializer(serializers.ModelSerializer):
     def get_is_hated(self, instance):
         user = user_of_request(self)
         return user and user.is_authenticated() and instance.hates.filter(user=user).exists()
+    
+    def get_is_opinion_disabled(self, instance):
+        user = user_of_request(self)
+        return not user or not user.is_authenticated() or instance.user == user
+    
+    def get_publication_date_since(self, instance):
+        from django.contrib.humanize.templatetags.humanize import naturaltime
+        return naturaltime(instance.publication_date)
 
 class MovieOpinionSerializer(serializers.ModelSerializer):
     class Meta:

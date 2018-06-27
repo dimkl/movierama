@@ -1,25 +1,29 @@
 {% load static %}
+{% load i18n %}
 
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-{# CSS #}
-<link rel="stylesheet" href="{% static 'css/vendors/normalize.css' %}">
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
-
-<link rel="stylesheet" href="{% static 'css/main.css' %}">
-{% block head_css %}
-{% endblock %}
-
-{# JS #}
-<script type="text/javascript" src="{% static 'js/vendors/jquery.min.js'%}"></script>
-<script type="text/javascript" src="{% static 'js/vendors/bootstrap.min.js'%}"></script>
-<script type="text/javascript" src="{% static 'js/vendors/vue.min.js'%}"></script>
-
-<script type="text/javascript" src="{% static 'js/main.js'%}"></script>
-
-{% block head_scripts %}
-{% endblock %}
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+   
+    <title>{% block head_title %}{% trans "MovieRama" %}{% endblock %}</title>
+    {# CSS #}
+    <link rel="stylesheet" href="{% static 'css/vendors/normalize.css' %}">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
+    
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
+    {% block head_css %}
+    {% endblock %}
+    
+    {# JS #}
+    <script type="text/javascript" src="{% static 'js/vendors/jquery.min.js'%}"></script>
+    <script type="text/javascript" src="{% static 'js/vendors/vue.min.js'%}"></script>
+    <script type="text/javascript" src="{% static 'js/vendors/js.cookie.js'%}"></script>
+    
+    {% block head_scripts %}
+    {% endblock %}
 </head>
 <body>
     <div class="container">
@@ -27,13 +31,25 @@
             <h2 class="col-xs-12 text-right">Workable </h2>
         </div>
 
-        <div class="row custom-navbar"> 
-            {% include 'navbar.html' %}
+        <div class="row custom-navbar">
+            <h2> <a href="{% url 'homepage' %}"> MovieRama </a> </h2> 
+            {% block navbar %}
+            {% endblock %}
         </div>
         
         {% block content %}
         {% endblock %}
     </div>
+    
+{% block vue_components %}
+{% endblock %}
+
+{# javascript libs #}
+<script type="text/javascript" src="{% static 'js/vendors/bootstrap.min.js'%}"></script>
+
+{# javascript user libs #}
+<script type="text/javascript" src="{% static 'js/networkManager.js'%}"></script>
+
 {% block scripts %}
 {% endblock %}
 

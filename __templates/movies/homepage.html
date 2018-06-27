@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+{% load i18n %}
+{% load static %}
+
+{% block navbar %}
+     {% include 'navbar.html' %}
+{% endblock %}
+
+{% block scripts %}
+    <script type="text/javascript" src="{% static 'js/main.js'%}"></script>
+{% endblock %}
+
+{% block content %}
+<div id="app">
+    <div class="row">
+        <filters-component @sort="sortMovies" :ordering="ordering"></filters-component>
+    </div>
+    {% if request.user.is_authenticated %}
+        <div class="row" v-show="createMode">
+           <movie-form-component @create-movie="createMovie">
+           </movie-form-component>
+        </div>
+    {% endif %}
+    <div class="row">
+        <div class="col-xs-12 col-sm-10 movies-list">
+           <movie-component 
+                @set-opinion="setOpinion"
+                @search-movies="getUserMovies"
+                v-for="movie in movies"
+                :movie="movie"></movie-component>
+        </div>
+        {% if request.user.is_authenticated %}
+            <div class="col-xs-12 col-sm-2">
+                
+                <button v-if="!createMode" 
+                    class="btn btn-success" 
+                    @click.prevent="showCreateMovieForm"> 
+                    {% trans 'New Movie' %}
+                </button>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+
+{% block vue_components %}
+     {% include 'movies/components/filters.html' %}
+     {% include 'movies/components/movie.html' %}
+     {% include 'movies/components/create.html' %}
+{% endblock %}

@@ -1,10 +1,43 @@
-{% load i18n %} 
-<div class="filters-panel">
-    <span class=""> {% trans 'Sort By' %} </span>
+{% load i18n %}
+
+<script type="text/html" id="filters-component-template">
+<div class="well filters-panel">
+    <span > {% trans 'Sort By' %} </span>
     <span class="filters">
-        <a href="#likes" class=""> {% trans 'Likes' %}</a> | 
-        <a href="#hates" class=""> {% trans 'Hates' %}</a> | 
-        <a href="#publication-date" class=""> {% trans 'Date' %}</a> | 
-        <a href="#air-date" class=""> {% trans 'Air Date' %}</a>
+        <a href="#" @click.prevent="sort('likes_counter')"> {% trans 'Likes' %}</a> | 
+        <a href="#" @click.prevent="sort('hates_counter')"> {% trans 'Hates' %}</a> | 
+        <a href="#" @click.prevent="sort('publication_date')"> {% trans 'Date' %}</a> | 
+        <a href="#" @click.prevent="sort('air_date')"> {% trans 'Air Date' %}</a>
     </span>
 </div>
+</script>
+<script type="text/javascript">
+(function(){
+    Vue.component('filters-component', {
+        template:'#filters-component-template',
+        props: {
+            'ordering':{
+                default:'-publication_date',
+                type: String
+            }
+        },
+        computed: {
+            orderingField: function(){
+                return this.ordering.replace('-', '');
+            }
+        },
+        methods: {
+            sort: function(ordering){
+                var descending = this.ordering.indexOf('-') === 0 ? true: false;
+                // toggle ordering if same dorting field
+                if (this.orderingField === ordering ){
+                    descending = !descending;
+                }
+                ordering = (descending? '-':'') + ordering;
+                
+                this.$emit('sort', ordering);
+            },
+        }
+    })
+})()
+</script>

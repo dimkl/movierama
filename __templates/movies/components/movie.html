@@ -3,14 +3,83 @@
 {% trans 'Posted by' as user_text %}
 {% trans 'likes' as likes_text %}
 {% trans 'hates' as hates_text %}
+{% trans 'Like' as like_btn %}
+{% trans 'Hate' as hate_btn %}
 
+<script type="text/html" id="movie-component-template">
 {% verbatim %}
 <div class="movie-item panel panel-default">
     <div class="panel-body">
         <h3 class="title"> {{ movie.title }} </h3>
-        <div> {{ user_text }} {{ movie.user.username }} {{ movie.publication_date_since }} </div>
-        <div> {{ movie.description }} </div>
-        <div> {{ movie.likes }} {{ likes_text }} | {{ movie.hates }} {{ hates_text }}</div>
+        <p> {{ userText }} <a href="#" @click.prevent="searchMovies"> {{ movie.user.first_name }} {{ movie.user.last_name }}</a> {{ movie.publication_date_since }} </p>
+        <p> {{ movie.description }} </p>
+        <span> {{ movie.likes_counter }} {{ likesText }} | {{ movie.hates_counter }} {{ hatesText }}
+            <button v-if="!movie.is_opinion_disabled" 
+                    class="btn" 
+                    :class="movie.is_liked? 'btn-primary':'btn-default'"
+                    @click.prevent="setOpinion('like')"> {{likeBtn}} </button>
+            <button  v-if="!movie.is_opinion_disabled" 
+                    class="btn" 
+                    :class="movie.is_hated? 'btn-primary':'btn-default'"
+                    @click.prevent="setOpinion('hate')"> {{hateBtn}} </button> 
+        </span>
     </div>
 </div>
 {% endverbatim %}
+
+</script>
+
+<script type="text/javascript">
+(function(){
+    var OPINION_MAPPING = {
+        'like': 'L',
+        'hate': 'H',
+        'reset': null
+    };
+    
+    Vue.component('movie-component', {
+        props: {
+            movie:{
+                default:function(){
+                    return  {}
+                },
+                type: Object
+            }
+        },
+        data: function(){
+            return {
+                userText: '{{user_text|default:""}}',
+                likesText: '{{likes_text|default:""}}',
+                hatesText: '{{hates_text|default:""}}',
+                likeBtn: '{{like_btn|default:""}}',
+                hateBtn: '{{hate_btn|default:""}}',
+            }  
+        },
+        template:'#movie-component-template',
+        methods: {
+            getOpinionValue: function(opinion){
+                if (opinion === 'like' && this.movie.is_liked){
+                    return OPINION_MAPPING.reset;
+                }
+                
+                if (opinion === 'hate' && this.movie.is_hated){
+                    return OPINION_MAPPING.reset;
+                }
+                
+                return OPINION_MAPPING[opinion] || OPINION_MAPPING.reset;
+            },
+            setOpinion: function(opinion){
+                if (this.movie.is_opinion_disabled){
+                    console.error('Publisher of the movie cannot like|hate it.')
+                    return;
+                }
+                
+                this.$emit('set-opinion', this.movie.id, this.getOpinionValue(opinion));
+            },
+            searchMovies: function(){
+                 this.$emit('search-movies', this.movie.user.username);
+            }
+        }
+    })
+})()
+</script>

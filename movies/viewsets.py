@@ -38,9 +38,6 @@ class MovieViewSet(mixins.ListModelMixin,
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
     
-    def get_owner(self, instance):
-        return 
-        
     def create(self, request, *args, **kwargs):
         """
         Create Movie resource endpoint allowed only to authenticated users.
