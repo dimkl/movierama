@@ -9,7 +9,7 @@ class Movie(models.Model):
     title = models.CharField(max_length=255)
     description = models.TextField(null=True, blank=True)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    air_date =  models.DateTimeField(null=True, blank=True)
+    air_date =  models.DateField(null=True, blank=True)
     publication_date = models.DateTimeField(auto_now_add=True)
     
     likes_counter = models.PositiveSmallIntegerField(default=0)    
@@ -19,7 +19,10 @@ class Movie(models.Model):
     
     class Meta:
         ordering = ('-publication_date', )
-
+    
+    def __unicode__(self):
+        return '{} | {} | {}'.format(self.id, self.title, self.user) 
+    
     @property
     def likes(self):
         return self.opinions.filter(opinion=OPINION_LIKE)
@@ -47,3 +50,9 @@ class MovieOpinion(models.Model):
         unique_together = ( 
             ('user', 'movie'),
         )
+    
+    def __unicode__(self):
+        return '{} | {} | {}'.format(self.get_opinion_display() or '', 
+                                     self.movie.title, 
+                                     self.user) 
+    
