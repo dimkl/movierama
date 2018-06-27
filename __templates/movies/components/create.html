@@ -6,7 +6,7 @@
         <p>{% trans 'Create new movie' %} </p>
         
         <input required class="form-control" name="title" placeholder="{% trans 'Title' %}" v-model="title" />
-        <input type="date" class="form-control" name="air_date" v-model="air_date" />
+        <input type="date" class="form-control" name="air_date" v-model="air_date" title="Airing Date"/>
         <textarea required class="form-control" name="description" v-model="description" > {% trans 'Description' %}</textarea>
     
         <button class="btn btn-default" type="submit"> 
