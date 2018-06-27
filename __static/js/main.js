@@ -7,7 +7,8 @@ $(function(){
             return {
                 movies: [],
                 ordering: '-publication_date',
-                createMode: false
+                createMode: false,
+                username: null
             }   
         },
         mounted: function(){
@@ -23,9 +24,15 @@ $(function(){
                     }
                 }
             },
-            updateUrl : function(ordering){
-                var fragment = window.location.hash;
-                var urlPath = window.location.href.replace(fragment, '#'+ ordering);
+            updateUrl : function(fragment){
+                var _hash = window.location.hash;
+                var urlPath = window.location.href;
+                
+                if (_hash){
+                    urlPath = urlPath.replace(_hash, '#'+ fragment);
+                } else {
+                    urlPath += '#' + fragment;
+                }
                 window.history.pushState('', document.title, urlPath);
             },
             // event callbacks
@@ -33,7 +40,7 @@ $(function(){
                 var cmp = this;
 
                 networkManager
-                    .getMovies(ordering)
+                    .getUserMovies(cmp.username, ordering)
                     .then(function(response){
                         cmp.movies = response['results'];
                         cmp.ordering = ordering;
@@ -59,6 +66,7 @@ $(function(){
                     .getUserMovies(username)
                     .then(function(response){
                         cmp.movies = response['results'];
+                        cmp.username = username;
                     });
             },
             createMovie: function(movie){

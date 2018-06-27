@@ -47,9 +47,9 @@
         if (ordering){
             base_url += 'ordering='+ordering
         }
-        
+
         if (username){
-            base_url += ordering ? '&' : '' + 'search=' + username
+            base_url += (ordering ? '&' : '') + 'search=' + username
         }
         
         return $.get(base_url);

@@ -13,6 +13,9 @@
 
 {% block content %}
 <div id="app">
+    {% verbatim %}
+        <h3 v-if="username"> Movies of {{username}} <a href="/" >Undo</a></h3>
+    {% endverbatim %}
     <div class="row">
         <filters-component @sort="sortMovies" :ordering="ordering"></filters-component>
     </div>
