@@ -29,6 +29,9 @@
     margin-left: 10px;
 }
 
+.filters-panel a.active {
+text-decoration: underline;	
+}
 /*
     Movie Item Section
 */

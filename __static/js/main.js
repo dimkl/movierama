@@ -11,7 +11,8 @@ $(function(){
             }   
         },
         mounted: function(){
-            this.sortMovies(this.ordering);
+            var ordering = (window.location.hash || '').replace('#', '') || this.ordering;
+            this.sortMovies(ordering);
         },
         methods: {
             // utilities
@@ -21,7 +22,12 @@ $(function(){
                         return i;
                     }
                 }
-            }, 
+            },
+            updateUrl : function(ordering){
+                var fragment = window.location.hash;
+                var urlPath = window.location.href.replace(fragment, '#'+ ordering);
+                window.history.pushState('', document.title, urlPath);
+            },
             // event callbacks
             sortMovies: function(ordering){
                 var cmp = this;
@@ -31,6 +37,9 @@ $(function(){
                     .then(function(response){
                         cmp.movies = response['results'];
                         cmp.ordering = ordering;
+                        
+                        // change url based on ordering
+                        cmp.updateUrl(ordering);
                     });
             },
             setOpinion: function(movieId, opinion){

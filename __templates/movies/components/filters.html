@@ -4,20 +4,25 @@
 <div class="well filters-panel">
     <span > {% trans 'Sort By' %} </span>
     <span class="filters">
-        <a href="#" @click.prevent="sort('likes_counter')"> {% trans 'Likes' %}</a> | 
-        <a href="#" @click.prevent="sort('hates_counter')"> {% trans 'Hates' %}</a> | 
-        <a href="#" @click.prevent="sort('publication_date')"> {% trans 'Date' %}</a> | 
-        <a href="#" @click.prevent="sort('air_date')"> {% trans 'Air Date' %}</a>
+        <a :class="orderingField === 'likes_counter'?'active':''" 
+           href="#likes_counter" @click.prevent="sort('likes_counter')"> {% trans 'Likes' %}</a> | 
+        <a :class="orderingField === 'hates_counter'?'active':''"  
+           href="#hates_counter" @click.prevent="sort('hates_counter')"> {% trans 'Hates' %}</a> | 
+        <a :class="orderingField === 'publication_date'?'active':''"  
+           href="#publication_date" @click.prevent="sort('publication_date')"> {% trans 'Date' %}</a> | 
+        <a :class="orderingField === 'air_date'?'active':''"  
+           href="#air_date" @click.prevent="sort('air_date')"> {% trans 'Air Date' %}</a>
     </span>
 </div>
 </script>
 <script type="text/javascript">
 (function(){
+
     Vue.component('filters-component', {
         template:'#filters-component-template',
         props: {
             'ordering':{
-                default:'-publication_date',
+                default:  '-publication_date',
                 type: String
             }
         },
