@@ -6,50 +6,17 @@ from rest_framework.test import APITestCase
 from django.urls import reverse
 from django.contrib.auth import get_user_model
 from django.utils.timezone import now
-from django.conf import settings
 
-from .models import Movie, MovieOpinion, OPINION_LIKE, OPINION_HATE
-from .serializers import MovieSerializer
-
-
-def get_paginated_queryset(qs):
-    page = settings.REST_FRAMEWORK['PAGE_SIZE']
-    return qs[0:page]
-
-def get_sample_users():
-    # create some users
-    users = [get_user_model().objects.create(username='mitsos{}'.format(i)) for i in xrange(0,4)]
-    return users
-
-
-def get_sample_movies(users):
-    user = users[0]
-    # create some movies
-    movies = [Movie.objects.create(title=str(m), description=str(m), user=user, air_date=now()) for m in range(0,4)]
-    Movie.objects.create(title='5', description='5', user=user, air_date=now())
-    
-    return movies
-
-
-def set_sample_opinions(users, movies, opinion):
-    [set_sample_opinion(user, movies[movie_index], opinion)
-    for index, user in enumerate(users) 
-    for movie_index in range(index,4)]
-
-
-def set_sample_opinion(user, movie, opinion):
-    # set already liked movie by user
-    opinion = MovieOpinion.objects.create(
-                            user=user, 
-                            movie=movie, 
-                            opinion=opinion)
-   
-    # update movie likes|hates counter
-    movie = opinion.movie
-    movie.likes_counter = movie.likes.count()
-    movie.hates_counter = movie.hates.count()
-    
-    movie.save(update_fields=['likes_counter', 'hates_counter'])
+from movies.models import Movie, MovieOpinion, OPINION_LIKE, OPINION_HATE
+from movies.serializers import MovieSerializer
+from movies.factory import (
+    get_paginated_queryset,
+    get_sample_users,
+    get_sample_movies,
+    set_sample_opinions,
+    set_sample_opinion,
+    get_sample_request
+)
 
 
 class MovieViewSetCreateTests(APITestCase):
@@ -74,7 +41,9 @@ class MovieViewSetCreateTests(APITestCase):
         self.assertEqual(Movie.objects.count(), 1)
         movie = Movie.objects.get()
         # check response data
-        self.assertEqual(response.data, MovieSerializer(instance=movie).data)
+        request = get_sample_request(user)
+        expected_data = MovieSerializer(instance=movie, context={'request': request}).data
+        self.assertEqual(response.data, expected_data)
         # check inserted data
         self.assertEqual(movie.title, 'Movie title')
         self.assertEqual(movie.description, 'Description')
@@ -112,7 +81,8 @@ class MovieViewSetOrderingTests(APITestCase):
         
         # create expected response data
         qs = get_paginated_queryset(Movie.objects.order_by('-likes_counter'))
-        expected_response = MovieSerializer(qs, many=True).data
+        request = get_sample_request()
+        expected_response = MovieSerializer(qs, many=True, context={'request': request}).data
 
         self.assertEqual(response.data['results'], expected_response)
     
@@ -133,7 +103,8 @@ class MovieViewSetOrderingTests(APITestCase):
         
         # create expected response data
         qs = get_paginated_queryset(Movie.objects.order_by('likes_counter'))
-        expected_response = MovieSerializer(qs, many=True).data
+        request = get_sample_request()
+        expected_response = MovieSerializer(qs, many=True, context={'request': request}).data
 
         self.assertEqual(response.data['results'], expected_response)
         
@@ -153,7 +124,8 @@ class MovieViewSetOrderingTests(APITestCase):
         
         # create expected response data
         qs = get_paginated_queryset(Movie.objects.order_by('-hates_counter'))
-        expected_response = MovieSerializer(qs, many=True).data
+        request = get_sample_request()
+        expected_response = MovieSerializer(qs, many=True, context={'request': request}).data
 
         self.assertEqual(response.data['results'], expected_response)
     
@@ -173,7 +145,8 @@ class MovieViewSetOrderingTests(APITestCase):
         
         # create expected response data
         qs = get_paginated_queryset(Movie.objects.order_by('hates_counter'))
-        expected_response = MovieSerializer(qs, many=True).data
+        request = get_sample_request()
+        expected_response = MovieSerializer(qs, many=True, context={'request': request}).data
     
         self.assertEqual(response.data['results'], expected_response)
 
@@ -190,7 +163,8 @@ class MovieViewSetOrderingTests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         
         qs = get_paginated_queryset(Movie.objects.order_by('-publication_date'))
-        expected_response = MovieSerializer(qs, many=True).data
+        request = get_sample_request()
+        expected_response = MovieSerializer(qs, many=True, context={'request': request}).data
         
         self.assertEqual(response.data['results'], expected_response)
     
@@ -207,8 +181,9 @@ class MovieViewSetOrderingTests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         
         qs = get_paginated_queryset(Movie.objects.order_by('publication_date'))
-        expected_response = MovieSerializer(qs, many=True).data
-        
+        request = get_sample_request()
+        expected_response = MovieSerializer(qs, many=True, context={'request': request}).data
+
         self.assertEqual(response.data['results'], expected_response)
     
     def test_ordering_descending_air_date(self):
@@ -224,7 +199,9 @@ class MovieViewSetOrderingTests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         
         qs = get_paginated_queryset(Movie.objects.order_by('-air_date'))
-        expected_response = MovieSerializer(qs, many=True).data
+        request = get_sample_request()
+        expected_response = MovieSerializer(qs, many=True, context={'request': request}).data
+
         self.assertEqual(response.data['results'], expected_response)
     
     def test_ordering_asceding_air_date(self):
@@ -240,7 +217,9 @@ class MovieViewSetOrderingTests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         
         qs = get_paginated_queryset(Movie.objects.order_by('air_date'))
-        expected_response = MovieSerializer(qs, many=True).data
+        request = get_sample_request()
+        expected_response = MovieSerializer(qs, many=True, context={'request': request}).data
+
         self.assertEqual(response.data['results'], expected_response)
 
 
@@ -258,7 +237,9 @@ class MovieListViewSetTests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         
         qs = get_paginated_queryset(Movie.objects.all())
-        expected_response = MovieSerializer(qs, many=True).data
+        request = get_sample_request()
+        expected_response = MovieSerializer(qs, many=True, context={'request': request}).data
+
         self.assertEqual(response.data['results'], expected_response)
 
 
@@ -279,7 +260,9 @@ class MovieListByUserViewSetTests(APITestCase):
         qs = get_paginated_queryset(Movie.objects.filter(user__username=search_username))
         self.assertNotEqual(qs.count(), 0)
 
-        expected_response = MovieSerializer(qs, many=True).data
+        request = get_sample_request()
+        expected_response = MovieSerializer(qs, many=True, context={'request': request}).data
+
         self.assertEqual(response.data['results'], expected_response)
     
     def test_list_movies_by_undefined_user(self):
@@ -299,7 +282,9 @@ class MovieListByUserViewSetTests(APITestCase):
         qs = get_paginated_queryset(Movie.objects.filter(user__username=search_username))
         self.assertEqual(qs.count(), 0)
         
-        expected_response = MovieSerializer(qs, many=True).data
+        request = get_sample_request()
+        expected_response = MovieSerializer(qs, many=True, context={'request': request}).data
+
         self.assertEqual(response.data['results'], expected_response)
 
 
@@ -320,12 +305,15 @@ class MovieOpinionViewSetTests(APITestCase):
         
         self.client.force_authenticate(user=not_owner)
         response = self.client.post(url, data, format='json')
+       
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         self.assertEqual(MovieOpinion.objects.count(), 1)
         
         movie.refresh_from_db()
-        expected_response = MovieSerializer(movie).data
+        request = get_sample_request(not_owner)
+        expected_response = MovieSerializer(instance=movie, context={'request': request}).data
+        
         self.assertEqual(response.data, expected_response)
         
         self.assertEqual(movie.likes_counter, 1)
@@ -379,7 +367,9 @@ class MovieOpinionViewSetTests(APITestCase):
         self.assertEqual(MovieOpinion.objects.count(), 1)
         
         movie.refresh_from_db()
-        expected_response = MovieSerializer(movie).data
+        request = get_sample_request(not_owner)
+        expected_response = MovieSerializer(instance=movie, context={'request': request}).data
+
         self.assertEqual(response.data, expected_response)
         
         self.assertEqual(movie.likes_counter, 1)
@@ -405,7 +395,9 @@ class MovieOpinionViewSetTests(APITestCase):
         self.assertEqual(MovieOpinion.objects.count(), 1)
         
         movie.refresh_from_db()
-        expected_response = MovieSerializer(movie).data
+        request = get_sample_request(not_owner)
+        expected_response = MovieSerializer(instance=movie, context={'request': request}).data
+
         self.assertEqual(response.data, expected_response)
         
         self.assertEqual(movie.hates_counter, 1)
@@ -459,7 +451,9 @@ class MovieOpinionViewSetTests(APITestCase):
         self.assertEqual(MovieOpinion.objects.count(), 1)
         
         movie.refresh_from_db()
-        expected_response = MovieSerializer(movie).data
+        request = get_sample_request(not_owner)
+        expected_response = MovieSerializer(instance=movie, context={'request': request}).data
+        
         self.assertEqual(response.data, expected_response)
         
         self.assertEqual(movie.hates_counter, 1)
@@ -487,7 +481,9 @@ class MovieOpinionViewSetTests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         
         movie.refresh_from_db()
-        expected_response = MovieSerializer(movie).data
+        request = get_sample_request(not_owner)
+        expected_response = MovieSerializer(instance=movie, context={'request': request}).data
+
         self.assertEqual(response.data, expected_response)
         
         self.assertEqual(movie.likes_counter, 0)
@@ -572,7 +568,9 @@ class MovieOpinionViewSetTests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         
         movie.refresh_from_db()
-        expected_response = MovieSerializer(movie).data
+        request = get_sample_request(not_owner)
+        expected_response = MovieSerializer(instance=movie, context={'request': request}).data
+        
         self.assertEqual(response.data, expected_response)
         
         self.assertEqual(movie.hates_counter, 0)
@@ -756,3 +754,4 @@ class MovieOpinionViewSetTests(APITestCase):
         
         self.assertEqual(movie.hates_counter, 0)
         self.assertEqual(movie.hates.count(), 0)
+

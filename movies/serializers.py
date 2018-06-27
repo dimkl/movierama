@@ -1,15 +1,35 @@
 from rest_framework import serializers
 
-from .models import Movie, MovieOpinion
+from movies.models import Movie, MovieOpinion
 from users.serializers import UserSerializer
+
+
+def user_of_request(serializer_instance):
+    user = None
+    request = serializer_instance.context.get("request")
+    if request and hasattr(request, "user"):
+        user = request.user
+    
+    return user
+
 
 class MovieSerializer(serializers.ModelSerializer):
     user = UserSerializer(read_only=True)
-        
+    
+    is_liked = serializers.SerializerMethodField()
+    is_hated = serializers.SerializerMethodField()
+    
     class Meta:
         model = Movie
         exclude = ('updated_at', )
 
+    def get_is_liked(self, instance):
+        user = user_of_request(self)
+        return user and user.is_authenticated() and instance.likes.filter(user=user).exists()
+    
+    def get_is_hated(self, instance):
+        user = user_of_request(self)
+        return user and user.is_authenticated() and instance.hates.filter(user=user).exists()
 
 class MovieOpinionSerializer(serializers.ModelSerializer):
     class Meta:

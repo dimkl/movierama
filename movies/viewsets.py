@@ -157,14 +157,14 @@ class MovieViewSet(mixins.ListModelMixin,
         """
         response_data = {}
         status_code = status.HTTP_200_OK
-        serializer = MovieOpinionSerializer(data=request.data)
+        serializer = MovieOpinionSerializer(data=request.data, context={'request': request})
         
         try:
             instance = self.get_object()
             serializer.is_valid(True)
             
             opinion = serializer.save(user=request.user, movie=instance)
-            response_data = MovieSerializer(instance=opinion.movie).data
+            response_data = MovieSerializer(instance=opinion.movie, context={'request': request}).data
         except Http404 as e:
             response_data['error'] = 'Movie with pk `{}` does not exist'.format(kwargs.get('pk'))
             status_code = status.HTTP_400_BAD_REQUEST
