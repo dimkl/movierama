@@ -10,19 +10,17 @@ MovieRama Project Information
 
 4) pip > 9
 
-
 ## Local setup project
-1) Install virtualenvwrapper: `pip install virtualenvwrapper`
 
-2) Create virtualenv for packages: `mkvirtualenv -a <path_of_extracted_directory> movierama`
+1) Create virtualenv for packages: `mkvirtualenv -a <path_of_extracted_directory> movierama`
 
-3) Enable and go to virtualenv: `workon movierama`
+2) Enable and go to virtualenv: `workon movierama`
 
-4) Install project requirements: `pip install -r requirements.txt`
+3) Install project requirements: `pip install -r requirements.txt`
 
-5) Run local server: `python manage.py runserver`
+4) Run local server: `python manage.py runserver`
 
-6) Browse to localhost:8000
+5) Browse to localhost:8000
 
 
 ## Testing
