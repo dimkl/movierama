@@ -23,7 +23,7 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     # third party 
     url(r'^accounts/', include('allauth.urls')),
-    url(r'^anymail/', include('anymail.urls')),
+    # url(r'^anymail/', include('anymail.urls')),
     # local apps
     url(r'^$',MoviesListView.as_view(), name='homepage' ),
     # url(r'^movies/',include('movies.urls', namespace='movies') ),
