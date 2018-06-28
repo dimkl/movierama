@@ -1,6 +1,8 @@
 $(function(){
     /* globals $, Vue, networkManager */
-    
+    var loc = window.location;
+    var params = new URLSearchParams(loc.search)
+   
     var app = new Vue({
         el: '#app',
         data: function(){
@@ -8,7 +10,7 @@ $(function(){
                 movies: [],
                 ordering: '-publication_date',
                 createMode: false,
-                username: null
+                username: params.get('search')
             }   
         },
         mounted: function(){
@@ -24,15 +26,10 @@ $(function(){
                     }
                 }
             },
-            updateUrl : function(fragment){
-                var _hash = window.location.hash;
-                var urlPath = window.location.href;
+            updateUrl : function(query_key, query_value){
+                params.set(query_key, query_value);
                 
-                if (_hash){
-                    urlPath = urlPath.replace(_hash, '#'+ fragment);
-                } else {
-                    urlPath += '#' + fragment;
-                }
+                var urlPath = loc.origin + loc.pathname + '?' + params.toString();
                 window.history.pushState('', document.title, urlPath);
             },
             // event callbacks
@@ -46,7 +43,7 @@ $(function(){
                         cmp.ordering = ordering;
                         
                         // change url based on ordering
-                        cmp.updateUrl(ordering);
+                        cmp.updateUrl('ordering', ordering );
                     });
             },
             setOpinion: function(movieId, opinion){
@@ -67,6 +64,7 @@ $(function(){
                     .then(function(response){
                         cmp.movies = response['results'];
                         cmp.username = username;
+                        cmp.updateUrl('search', username );
                     });
             },
             createMovie: function(movie){

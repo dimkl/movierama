@@ -22,6 +22,15 @@
     <script type="text/javascript" src="{% static 'js/vendors/vue.min.js'%}"></script>
     <script type="text/javascript" src="{% static 'js/vendors/js.cookie.js'%}"></script>
     
+    <!-- URLSearchParams polyfill -->
+    <script>
+    try { if (new URLSearchParams('q=%2B').get('q') !== '+') throw {}; }
+    catch (error) {
+      window.URLSearchParams = void 0;
+      document.write('<script src="{% static 'js/vendors/url-search-params.js' %}"><'+'/script>');
+    }
+    </script>
+
     {% block head_scripts %}
     {% endblock %}
 </head>
@@ -32,7 +41,7 @@
         </div>
 
         <div class="row custom-navbar">
-            <h2> <a href="{% url 'homepage' %}"> MovieRama </a> </h2> 
+            <h2> MovieRama </h2> 
             {% block navbar %}
             {% endblock %}
         </div>
