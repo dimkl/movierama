@@ -10,6 +10,7 @@ MovieRama Project Information
 
 4) pip > 9
 
+
 ## Local setup project
 1) Install virtualenvwrapper: `pip install virtualenvwrapper`
 
@@ -23,5 +24,15 @@ MovieRama Project Information
 
 6) Browse to localhost:8000
 
+
+## Testing
+1) Execute `python manage.py test`
+
+
 ## Data
 1) Admin with username/password: admin/123456qwert
+
+
+## TODO
+1) Add email verification on signup
+2) Change authentication to JWT for API
