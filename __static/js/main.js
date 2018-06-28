@@ -75,8 +75,8 @@ $(function(){
                 networkManager
                     .createMovie(movie)
                     .then(function(response){
-                        console.log(response, movie)
-                        cmp.sortMovies(cmp.ordering)
+                        cmp.sortMovies(cmp.ordering);
+                        cmp.$refs.createForm.resetData();
                     });
             },
             showCreateMovieForm : function(){

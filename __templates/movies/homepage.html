@@ -21,7 +21,7 @@
     </div>
     {% if request.user.is_authenticated %}
         <div class="row" v-show="createMode">
-           <movie-form-component @create-movie="createMovie">
+           <movie-form-component ref="createForm" @create-movie="createMovie">
            </movie-form-component>
         </div>
     {% endif %}

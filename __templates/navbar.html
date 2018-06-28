@@ -4,7 +4,7 @@
 {% if request.user.is_authenticated %}
     {% trans 'Welcome back' %} 
     {#<a href="#">{{ request.user.username }}</a>  | #} 
-    <a href="#">{{ request.user.first_name }} {{ request.user.last_name }}</a> | 
+    <a href="/?search={{request.user.username}}" >{{ request.user.first_name }} {{ request.user.last_name }}</a> | 
     <a href="{% url 'account_logout' %}">{% trans 'Logout' %} </a>
 {% else %}
     <a href="{% url 'account_login' %}">  {% trans 'Login' %} </a> or  
