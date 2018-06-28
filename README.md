@@ -31,6 +31,7 @@ MovieRama Project Information
 
 ## Data
 1) Admin with username/password: admin/123456qwert
+2) load data `python manage.py loaddata _data/users.json _data/movies.json`
 
 
 ## TODO
