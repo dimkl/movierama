@@ -32,6 +32,7 @@ MovieRama Project Information
 2) load data `python manage.py loaddata _data/users.json _data/movies.json`
 
 
-## TODO
+## Future TODO
 1) Add email verification on signup
 2) Change authentication to JWT for API
+3) Add pagination UI and frontend actions to movies list

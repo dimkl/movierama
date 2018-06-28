@@ -180,29 +180,14 @@ REST_FRAMEWORK = {
     ],
     'EXCEPTION_HANDLER': 'core.api.custom_exception_handler',
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
-    'PAGE_SIZE': 20
+    'PAGE_SIZE': 100
 }
 
 # EMAIL SMTP SETTINGS
-EMAIL_USE_TLS = True
-
-# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-# EMAIL_HOST = 'smtp.sparkpostmail.com'
-# EMAIL_PORT = 587
-# EMAIL_HOST_USER = 'SMTP_Injection'
-# EMAIL_HOST_PASSWORD = 'ae8dfd4f364835cf9b7e7e699fdac5bdc74ca26c'
-
+# EMAIL_USE_TLS = True
 # DEFAULT_FROM_EMAIL = 'movierama@mailinator.com'
-# EMAIL_BACKEND = "anymail.backends.sparkpost.EmailBackend"
-# ANYMAIL = {
-#     'SPARKPOST_API_KEY': 'ae8dfd4f364835cf9b7e7e699fdac5bdc74ca26c',
-#     'SEND_DEFAULTS': {
-#         'use_sandbox': True,
-#         'from_email': 'django-sparkpost@sparkpostbox.com'
-#     }
-# }
 
-# SPARKPOST_API_KEY = 'ae8dfd4f364835cf9b7e7e699fdac5bdc74ca26c'
+# SPARKPOST_API_KEY = ''
 # EMAIL_BACKEND = 'sparkpost.django.email_backend.SparkPostEmailBackend'
 # SPARKPOST_OPTIONS = {
 #     'track_opens': False,
