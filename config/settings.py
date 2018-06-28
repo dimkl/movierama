@@ -25,7 +25,7 @@ SECRET_KEY = 'vbbib7+$2o+$@m-=a%-a3vo0mq^wbtb7b_&u^-a2xwminyql5h'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['movierama-dimkl1.c9users.io']
+ALLOWED_HOSTS = ['movierama-dimkl1.c9users.io','127.0.0.1', 'localhost', '0.0.0.0']
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 
