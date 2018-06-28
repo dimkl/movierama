@@ -1,5 +1,5 @@
 Django==1.11
-django-extensions==3.6
+django-extensions==2
 
 # authentication
 django-allauth==0.32
@@ -9,4 +9,4 @@ coreapi==2.3.3
 djangorestframework==3.8.2
 
 # email backends 
-django-anymail[sparkpost]==3.0
+#django-anymail[sparkpost]==3.0

@@ -10,6 +10,7 @@ MovieRama Project Information
 
 4) pip > 9
 
+
 ## Local setup project
 
 1) Create virtualenv for packages: `mkvirtualenv -a <path_of_extracted_directory> movierama`
@@ -25,6 +26,10 @@ MovieRama Project Information
 
 ## Testing
 1) Execute `python manage.py test`
+
+
+## Tips
+1) Show all project urls : `python manage.py show_urls`
 
 
 ## Data
